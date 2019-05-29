@@ -219,7 +219,8 @@ namespace HumaneSociety
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+            IQueryable<Adoption> pendingAdoptions = db.Adoptions.Where(c => c.ApprovalStatus == "Pending");
+            return pendingAdoptions;
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
@@ -228,34 +229,29 @@ namespace HumaneSociety
             {
                 adoption.PaymentCollected = true;
                 adoption.ApprovalStatus = "Approved";
+                adoption.PaymentCollected = true;
             }
             else
             {
                 adoption.PaymentCollected = false;
                 adoption.ApprovalStatus = "Rejected";
+                adoption.PaymentCollected = false;
             }
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
 
-            var deleteAdoptions = from c in db.Adoptions
-                                  where c.AnimalId == animalId && c.ClientId == clientId
-                                  select c;
+            var deleteAdoptions = db.Adoptions.Where(c => c.AnimalId == animalId && c.ClientId == clientId).Single();
 
-            foreach (var c in db.Adoptions)
-            {
-                db.Adoptions.DeleteOnSubmit(c);
-            }
-
+            db.Adoptions.DeleteOnSubmit(deleteAdoptions);
             try
             {
                 db.SubmitChanges();
             }
-            catch (Exception e )
+            catch (NullReferenceException nullException)
             {
-                Console.WriteLine(e);
-                
+                Console.WriteLine(nullException); 
             }
         }
 
