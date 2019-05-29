@@ -189,19 +189,18 @@ namespace HumaneSociety
         {
             int categoryId = db.Categories.Where(c => c.Name == categoryName).Select(c => c.CategoryId).FirstOrDefault();
             return categoryId;
-
-
         }
         
         internal static Room GetRoom(int animalId)
         {
-            int roomId = db.Animals.Where(c => c.AnimalId == animalId).Select(c => c.AnimalId).FirstOrDefault();
-            return roomId;
+            Room room = db.Rooms.Where(c => c.AnimalId == animalId).Single();
+            return room;
         }
         
         internal static int GetDietPlanId(string dietPlanName)
         {
-            throw new NotImplementedException();
+            int dietPlanId = db.DietPlans.Where(c => c.Name == dietPlanName).Select(c => c.DietPlanId).FirstOrDefault();
+            return dietPlanId;
         }
 
         // TODO: Adoption CRUD Operations
