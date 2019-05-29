@@ -14,7 +14,6 @@ namespace HumaneSociety
         {
             db = new HumaneSocietyDataContext();
         }
-
         internal static List<USState> GetStates()
         {
             List<USState> allStates = db.USStates.ToList();       
@@ -188,12 +187,16 @@ namespace HumaneSociety
         // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
-            throw new NotImplementedException();
+            int categoryId = db.Categories.Where(c => c.Name == categoryName).Select(c => c.CategoryId).FirstOrDefault();
+            return categoryId;
+
+
         }
         
         internal static Room GetRoom(int animalId)
         {
-            throw new NotImplementedException();
+            int roomId = db.Animals.Where(c => c.AnimalId == animalId).Select(c => c.AnimalId).FirstOrDefault();
+            return roomId;
         }
         
         internal static int GetDietPlanId(string dietPlanName)
