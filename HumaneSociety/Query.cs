@@ -212,22 +212,35 @@ namespace HumaneSociety
         // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
-
+            db.Animals.InsertOnSubmit(animal);
+            db.SubmitChanges();
         }
 
         internal static Animal GetAnimalByID(int id)
         {
-            return new Animal();
+            Animal animalById = db.Animals.Where(a => a.AnimalId >= id).OrderBy(a => a.AnimalId).Select(a => a).Single();
+            return animalById;
         }
 
         internal static void UpdateAnimal(Animal animal, Dictionary<int, string> updates)
         {
-
+            Animal animalToUpdate = db.Animals.Where(a => a.AnimalId == animal.AnimalId).Single();
+            animalToUpdate.CategoryId = animal.CategoryId;
+            animalToUpdate.Name = animal.Name;
+            animalToUpdate.Age = animal.Age;
+            animalToUpdate.Demeanor = animal.Demeanor;
+            animalToUpdate.KidFriendly = animal.KidFriendly;
+            animalToUpdate.PetFriendly = animal.PetFriendly;
+            animalToUpdate.Weight = animal.Weight;
+            animalToUpdate.DietPlanId = animal.DietPlanId;
+            db.SubmitChanges();
         }
 
         internal static void RemoveAnimal(Animal animal)
         {
-
+            Animal animalToDelete = db.Animals.Where(a => a.AnimalId == animal.AnimalId).Single();
+            db.Animals.DeleteOnSubmit(animalToDelete);
+            db.SubmitChanges();
         }
 
         // TODO: Animal Multi-Trait Search
