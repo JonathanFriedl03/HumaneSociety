@@ -187,37 +187,35 @@ namespace HumaneSociety
                 switch (entry.Key)
                 {
                     case 1:
-                        //statements 
+                        var species = db.Categories.Where(s => s.Name == entry.Value).Select(p => p.CategoryId).SingleOrDefault();
+                        AnimalList = AnimalList.Where(p => p.CategoryId == species);
                         break;
                     case 2:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Name == entry.Value);
                         break;
                     case 3:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Age.ToString() == entry.Value);
                         break;
                     case 4:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Demeanor == entry.Value);
                         break;
                     case 5:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.KidFriendly.ToString() == entry.Value);
                         break;
                     case 6:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.PetFriendly.ToString() == entry.Value);
                         break;
                     case 7:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Weight.ToString() == entry.Value);
                         break;
                     case 8:
-                        //statements 
-                        break;
-                    case 9:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.AnimalId.ToString() == entry.Value);
                         break;
                     default:
-                        //optional 
-                        //statements 
-                }
+                        break;
+                }    
             }
+            return AnimalList;
         }
 
         // TODO: Misc Animal Things
