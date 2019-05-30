@@ -196,7 +196,7 @@ namespace HumaneSociety
                 case "2":
                     searchParameters.Add(2, GetStringData("name", "the animal's"));
                     break;
-                case "3":
+                case "3":`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
                     searchParameters.Add(3, GetIntegerData("age", "the animal's").ToString());
                     break;
                 case "4":
