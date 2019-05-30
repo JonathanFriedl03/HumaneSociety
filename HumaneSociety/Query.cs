@@ -252,37 +252,35 @@ namespace HumaneSociety
                 switch (entry.Key)
                 {
                     case 1:
-                        //statements 
+                        var species = db.Categories.Where(s => s.Name == entry.Value).Select(p => p.CategoryId).SingleOrDefault();
+                        AnimalList = AnimalList.Where(p => p.CategoryId == species);
                         break;
                     case 2:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Name == entry.Value);
                         break;
                     case 3:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Age.ToString() == entry.Value);
                         break;
                     case 4:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Demeanor == entry.Value);
                         break;
                     case 5:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.KidFriendly.ToString() == entry.Value);
                         break;
                     case 6:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.PetFriendly.ToString() == entry.Value);
                         break;
                     case 7:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.Weight.ToString() == entry.Value);
                         break;
                     case 8:
-                        //statements 
-                        break;
-                    case 9:
-                        //statements 
+                        AnimalList = AnimalList.Where(c => c.AnimalId.ToString() == entry.Value);
                         break;
                     default:
-                        //optional 
-                        //statements 
-                }
+                        break;
+                }    
             }
+            return AnimalList;
         }
 
         // TODO: Misc Animal Things
@@ -318,6 +316,8 @@ namespace HumaneSociety
                 AdoptionFee = 75,
                 PaymentCollected = false
             };
+            db.Adoptions.InsertOnSubmit(adoptions);
+            db.SubmitChanges();
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
@@ -361,12 +361,21 @@ namespace HumaneSociety
         // TODO: Shots Stuff
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
-
+            IQueryable<AnimalShot> animalShots = db.AnimalShots.Where(c => c.AnimalId == animal.AnimalId);
+            return animalShots;
         }
 
         internal static void UpdateShot(string shotName, Animal animal)
-        {
-
+        { int shotIdentity = db.Shots.Where(c => c.Name == shotName).Select(s =>s.ShotId).Single();
+            DateTime localDate = DateTime.Now;
+            AnimalShot givenShots = new AnimalShot()
+            {
+                AnimalId = animal.AnimalId,
+                ShotId = shotIdentity,
+                DateReceived = localDate
+            };
+            db.AnimalShots.InsertOnSubmit(givenShots);
+            db.SubmitChanges();
         }
     }
 }
