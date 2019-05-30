@@ -8,11 +8,16 @@ namespace HumaneSociety
 {
     public static class Query
     {        
-        static HumaneSocietyDataContext db;
+        public static HumaneSocietyDataContext db;
+        public static EmployeeData employeeInfo;
+        public delegate void EmployeeData(Employee employee);
+        public static Employee employee;
 
         static Query()
         {
             db = new HumaneSocietyDataContext();
+            employee = new Employee();
+            
         }
 
         internal static List<USState> GetStates()
@@ -155,82 +160,129 @@ namespace HumaneSociety
         // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
         {
-            throw new NotImplementedException();
+            
+            EmployeeData employeeInfo = SetDelegate(crudOperation);
+            employeeInfo(employee);
+            
+        }
+        public static EmployeeData SetDelegate(string crudOperation)
+        {
+            switch (crudOperation)
+            {
+                case "create":
+                    return new EmployeeData(CreateEmployee);
+                case "read":
+                    return new EmployeeData(ReadEmployee);
+                case "update":
+                    return new EmployeeData(UpdateEmployee);
+                case "delete":
+                    return new EmployeeData(DeleteEmployee);
+                default:
+                    return new EmployeeData(ReadEmployee);
+            }
+        }
+
+        public static void CreateEmployee(Employee employee)
+        {
+            db.Employees.InsertOnSubmit(employee);
+            db.SubmitChanges();
+        }
+
+        public static void ReadEmployee(Employee employee)
+        {
+            Console.WriteLine("The employee's name is: " + employee.FirstName + " " + employee.LastName);
+        }
+
+        public static void UpdateEmployee(Employee employee)
+        {
+            Employee employeeToUpdate = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
+            employeeToUpdate.FirstName = employee.FirstName;
+            employeeToUpdate.LastName = employee.LastName;
+            employeeToUpdate.EmployeeNumber = employee.EmployeeNumber;
+            employeeToUpdate.Email = employee.Email;         
+            db.SubmitChanges();
+        }
+
+        public static void DeleteEmployee(Employee employee)
+        {
+            Employee employeeToDelete = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
+            db.Employees.DeleteOnSubmit(employeeToDelete);
+            db.SubmitChanges();
         }
 
         // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
-            throw new NotImplementedException();
+
         }
 
         internal static Animal GetAnimalByID(int id)
         {
-            throw new NotImplementedException();
-        }       
+            return new Animal();
+        }
 
         internal static void UpdateAnimal(Animal animal, Dictionary<int, string> updates)
         {
-            throw new NotImplementedException();
+
         }
 
         internal static void RemoveAnimal(Animal animal)
         {
-            throw new NotImplementedException();
+
         }
 
         // TODO: Animal Multi-Trait Search
         internal static IQueryable<Animal> SearchForAnimalByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
-            throw new NotImplementedException();
+
         }
 
         // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
-            throw new NotImplementedException();
+            return 0;
         }
-        
+
         internal static Room GetRoom(int animalId)
         {
-            throw new NotImplementedException();
+            return new Room();
         }
-        
+
         internal static int GetDietPlanId(string dietPlanName)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
-            throw new NotImplementedException();
+
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
         {
-            throw new NotImplementedException();
+
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
-            throw new NotImplementedException();
+
         }
 
         // TODO: Shots Stuff
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
-            throw new NotImplementedException();
+
         }
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
-            throw new NotImplementedException();
+
         }
     }
 }
