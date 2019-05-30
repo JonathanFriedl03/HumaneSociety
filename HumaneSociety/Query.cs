@@ -19,7 +19,6 @@ namespace HumaneSociety
             employee = new Employee();
             
         }
-
         internal static List<USState> GetStates()
         {
             List<USState> allStates = db.USStates.ToList();       
@@ -234,44 +233,116 @@ namespace HumaneSociety
         // TODO: Animal Multi-Trait Search
         internal static IQueryable<Animal> SearchForAnimalByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
-
+            IQueryable<Animal> AnimalList = db.Animals;
+            foreach (KeyValuePair<int, string> entry in updates)
+            {
+                switch (entry.Key)
+                {
+                    case 1:
+                        //statements 
+                        break;
+                    case 2:
+                        //statements 
+                        break;
+                    case 3:
+                        //statements 
+                        break;
+                    case 4:
+                        //statements 
+                        break;
+                    case 5:
+                        //statements 
+                        break;
+                    case 6:
+                        //statements 
+                        break;
+                    case 7:
+                        //statements 
+                        break;
+                    case 8:
+                        //statements 
+                        break;
+                    case 9:
+                        //statements 
+                        break;
+                    default:
+                        //optional 
+                        //statements 
+                }
+            }
         }
 
         // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
-            return 0;
+            int categoryId = db.Categories.Where(c => c.Name == categoryName).Select(c => c.CategoryId).FirstOrDefault();
+            return categoryId;
         }
 
         internal static Room GetRoom(int animalId)
         {
-            return new Room();
+            Room room = db.Rooms.Where(c => c.AnimalId == animalId).Single();
+            return room;
         }
 
         internal static int GetDietPlanId(string dietPlanName)
         {
-            return 0;
+
+            int dietPlanId = db.DietPlans.Where(c => c.Name == dietPlanName).Select(c => c.DietPlanId).FirstOrDefault();
+            return dietPlanId;
+
         }
 
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
+            Adoption adoptions = new Adoption()
+            {
 
+                ClientId = client.ClientId,
+                AnimalId = animal.AnimalId,
+                ApprovalStatus = "Pending",
+                AdoptionFee = 75,
+                PaymentCollected = false
+            };
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-
+            IQueryable<Adoption> pendingAdoptions = db.Adoptions.Where(c => c.ApprovalStatus == "Pending");
+            return pendingAdoptions;
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
         {
-
+           if ( isAdopted == true)
+            {
+                adoption.PaymentCollected = true;
+                adoption.ApprovalStatus = "Approved";
+                adoption.PaymentCollected = true;
+            }
+            else
+            {
+                adoption.PaymentCollected = false;
+                adoption.ApprovalStatus = "Rejected";
+                adoption.PaymentCollected = false;
+            }
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
 
+            var deleteAdoptions = db.Adoptions.Where(c => c.AnimalId == animalId && c.ClientId == clientId).Single();
+
+            db.Adoptions.DeleteOnSubmit(deleteAdoptions);
+            try
+            {
+                db.SubmitChanges();
+            }
+            catch (NullReferenceException nullException)
+            {
+                Console.WriteLine(nullException); 
+            }
         }
 
         // TODO: Shots Stuff
