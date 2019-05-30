@@ -303,6 +303,8 @@ namespace HumaneSociety
                 AdoptionFee = 75,
                 PaymentCollected = false
             };
+            db.Adoptions.InsertOnSubmit(adoptions);
+            db.SubmitChanges();
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
@@ -346,12 +348,21 @@ namespace HumaneSociety
         // TODO: Shots Stuff
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
-
+            IQueryable<AnimalShot> animalShots = db.AnimalShots.Where(c => c.AnimalId == animal.AnimalId);
+            return animalShots;
         }
 
         internal static void UpdateShot(string shotName, Animal animal)
-        {
-
+        { int shotIdentity = db.Shots.Where(c => c.Name == shotName).Select(s =>s.ShotId).Single();
+            DateTime localDate = DateTime.Now;
+            AnimalShot givenShots = new AnimalShot()
+            {
+                AnimalId = animal.AnimalId,
+                ShotId = shotIdentity,
+                DateReceived = localDate
+            };
+            db.AnimalShots.InsertOnSubmit(givenShots);
+            db.SubmitChanges();
         }
     }
 }
