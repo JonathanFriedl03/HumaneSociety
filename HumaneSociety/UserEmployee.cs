@@ -64,9 +64,9 @@ namespace HumaneSociety
             List<string> adoptionInfo = new List<string>();
             int counter = 1;
             var adoptions = Query.GetPendingAdoptions().ToList();
-            if(adoptions.Count > 0)
+            if (adoptions.Count > 0)
             {
-                foreach(Adoption adoption in adoptions)
+                foreach (Adoption adoption in adoptions)
                 {
                     adoptionInfo.Add($"{counter}. {adoption.Client.FirstName} {adoption.Client.LastName}, {adoption.Animal.Name} {adoption.Animal.Category}");
                     counter++;
@@ -99,8 +99,8 @@ namespace HumaneSociety
             Console.Clear();
             var updates = UserInterface.GetAnimalSearchCriteria();
             var animals = Query.SearchForAnimalByMultipleTraits(updates).ToList();
-            
-            if(animals.Count > 1)
+
+            if (animals.Count > 1)
             {
                 UserInterface.DisplayUserOptions("Several animals found");
                 UserInterface.DisplayAnimals(animals);
@@ -109,7 +109,7 @@ namespace HumaneSociety
                 CheckAnimalStatus(ID);
                 return;
             }
-            if(animals.Count == 0)
+            if (animals.Count == 0)
             {
                 UserInterface.DisplayUserOptions("Animal not found please use different search criteria");
                 return;
@@ -161,7 +161,7 @@ namespace HumaneSociety
         {
             List<string> shotInfo = new List<string>();
             var shots = Query.GetShots(animal);
-            foreach(AnimalShot shot in shots.ToList())
+            foreach (AnimalShot shot in shots.ToList())
             {
                 shotInfo.Add($"{shot.Shot.Name} Date: {shot.DateReceived}");
             }
