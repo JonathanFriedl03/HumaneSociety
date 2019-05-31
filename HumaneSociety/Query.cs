@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace HumaneSociety
 {
@@ -377,5 +378,68 @@ namespace HumaneSociety
             db.AnimalShots.InsertOnSubmit(givenShots);
             db.SubmitChanges();
         }
+        internal static void ImportCsv(string fileName)
+        {
+            var lines = File.ReadAllLines(fileName);
+            foreach(var element in lines)
+            {
+                string turnTostring = element.ToString();
+                string removeDoubleQuotes = turnTostring.Replace("\"", "");
+                string removeSpaces = removeDoubleQuotes.Replace(" ", "");
+                string[] animalTraits = removeSpaces.Split(',').ToArray(); 
+                
+            }
+        }
+        internal static void CreateAnimalFromCsv(string[] animaltraits)
+        {
+            Animal animal = new Animal()
+            {
+                Name = animaltraits[0].ToString(),
+                Weight = ToNullableInt(animaltraits[1]),
+                Age = ToNullableInt(animaltraits[3]),
+                Demeanor = animaltraits[5],
+                KidFriendly = IntToBool(int.Parse(animaltraits[7])),
+                PetFriendly = IntToBool(int.Parse(animaltraits[8])),
+                AdoptionStatus = AdoptionStatus(animaltraits[10])
+
+            };
+            Query.AddAnimal(animal);
+        }
+        internal static int? ToNullableInt(string newstring)
+        {
+            int number;
+            if (int.TryParse(newstring, out number)) return number;
+            return null;
+        }
+        internal static bool IntToBool(int number)
+        {
+            if (number == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        internal static string AdoptionStatus( string adoption)
+        {
+            string availability;
+            if (adoption == "not adopted")
+            {
+                 availability = "available";
+                
+            }
+            else
+            {
+                availability = "unavailable";
+
+            }
+            return availability;
+
+        }
+        // "Murdock,null,15,2,null,skittish,1,0, null, adopted,null"
+        //" ""Loki""", null,18,3, null," ""cuddly""",1,1, null," ""adopted""", null
+        //" ""Rowdy""", null,20,8, null," ""deceased""",1,1, null," ""not adopted""", null
     }
 }
