@@ -303,6 +303,7 @@ namespace HumaneSociety
             }
             else
             {
+                //create new employee
                 UpdateEmployeeInfo();
             }
         }

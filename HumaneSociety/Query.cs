@@ -219,7 +219,7 @@ namespace HumaneSociety
 
         internal static Animal GetAnimalByID(int id)
         {
-            Animal animalById = db.Animals.Where(a => a.AnimalId >= id).OrderBy(a => a.AnimalId).Select(a => a).Single();
+            Animal animalById = db.Animals.Where(a => a.AnimalId >= id).First();
             return animalById;
         }
 
